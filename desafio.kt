@@ -1,21 +1,86 @@
-// [Template no Kotlin Playground](https://pl.kotl.in/WcteahpyN)
+//Cadastros Prévios
+val conteudo = ConteudoEducacional("HTML")
+val conteudo1 = ConteudoEducacional("CSS")
+val conteudo2 = ConteudoEducacional("JS")
+val conteudo3 = ConteudoEducacional("Python")
+val conteudo4 = ConteudoEducacional("SQL")
+val conteudo5 = ConteudoEducacional("Java")
+val conteudo6 = ConteudoEducacional("Kotlin")
 
-enum class Nivel { BASICO, INTERMEDIARIO, DIFICIL }
+val formacoes: MutableList<Formacoes> = mutableListOf(
+    Formacoes("Front", Nivel.Basico, listOf(conteudo, conteudo1, conteudo2) ),
+    Formacoes("Dados", Nivel.Basico, listOf(conteudo3, conteudo4)),
+    Formacoes("Back", Nivel.Intermediario, listOf(conteudo5, conteudo6))
+)
 
-class Usuario
+//Classes
+enum class Nivel{
+    Basico, Intermediario, Avancado
+}
 
-data class ConteudoEducacional(var nome: String, val duracao: Int = 60)
+data class ConteudoEducacional(val nome: String)
 
-data class Formacao(val nome: String, var conteudos: List<ConteudoEducacional>) {
+data class Aluno(val id: Int, val nome: String, val formacoes: Formacoes)
 
-    val inscritos = mutableListOf<Usuario>()
-    
-    fun matricular(usuario: Usuario) {
-        TODO("Utilize o parâmetro $usuario para simular uma matrícula (usar a lista de $inscritos).")
+data class Formacoes (val nome: String, val nivel: Nivel, val conteudosEducacionais: List<ConteudoEducacional>)
+
+fun escolha(num: Int): Formacoes {
+    return when (num) {
+        1 -> return Formacoes("Front", Nivel.Basico, listOf(conteudo, conteudo1, conteudo2) )
+        2 -> return Formacoes("Dados", Nivel.Basico, listOf(conteudo3, conteudo4))
+        3 -> return Formacoes("Back", Nivel.Intermediario, listOf(conteudo5, conteudo6))
+        else -> throw IllegalArgumentException("Número de escolha inválido")
     }
 }
 
-fun main() {
-    TODO("Analise as classes modeladas para este domínio de aplicação e pense em formas de evoluí-las.")
-    TODO("Simule alguns cenários de teste. Para isso, crie alguns objetos usando as classes em questão.")
+
+fun main(){
+
+
+
+    val alunos: MutableList<Aluno> = mutableListOf()
+
+    var opcao: Int = 1
+    var id: Int = 1
+
+    do{
+        println("***** Menu *****")
+        println("1- Listar Formacoes")
+        println("2- Listar alunos")
+        println("3- Matricular um aluno")
+        println("0- Sair\n")
+        print("Digite a opcao desejada: ")
+        opcao = readLine()?.toIntOrNull() ?: -1
+
+        when(opcao){
+            1->{
+                for (formacao in formacoes){
+                    println(formacao.nome)
+                }
+            }
+            2->{
+                for (aluno in alunos){
+                    println(aluno)
+                }
+            }
+            3->{
+                println("***** Formaulário de Matricula *****\n")
+                print("Digite o nome do aluno: ")
+                val nome = readLine() ?: "Pedro"
+                println("1- Front")
+                println("2- Dados")
+                println("3- Back")
+                print("Qual Formação deseja escolher? : ")
+                val formacao = escolha(readLine()?.toIntOrNull() ?: -1)
+                alunos.add(Aluno(id, nome, formacao))
+                id = id + 1
+            }
+            else->{
+                println("Opção Inválida")
+            }
+        }
+
+
+    }while (opcao != 0)
+
 }
